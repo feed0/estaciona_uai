@@ -25,7 +25,4 @@ public abstract class BaseUser {
     private String email;
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private UserType userType;
-
 }
