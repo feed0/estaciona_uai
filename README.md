@@ -30,12 +30,11 @@ platform to managers as well as a parking space reservation system for users.
 - PostgreSQL
 
 ### 2 Backend
-1. clean install dependencies
+clean install dependencies
 ```bash
 mvn clean install -DskipTests
 ```
-
-2. run the application
+run the application
 ```bash
 mvn spring-boot:run
 ```
