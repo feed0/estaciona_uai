@@ -16,7 +16,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "reservations")
+@Table(name = "reservation")
 public class Reservation {
     @Id
     @GeneratedValue

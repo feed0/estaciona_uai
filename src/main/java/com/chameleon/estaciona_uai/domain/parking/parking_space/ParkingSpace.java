@@ -14,7 +14,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "parking_spaces")
+@Table(name = "parking_space")
 public class ParkingSpace {
     @Id
     @GeneratedValue
