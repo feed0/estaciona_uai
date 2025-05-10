@@ -33,5 +33,4 @@ public class ManagerService {
 
         System.out.println("Manager signed up: " + managerSignupDto);
     }
-
 }
