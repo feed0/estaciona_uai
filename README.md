@@ -38,15 +38,3 @@ run the application
 ```bash
 mvn spring-boot:run
 ```
-
-### 3 Frontend
-
-1. change directory
-2. install dependencies
-3.  run
-
-```sh
-cd frontend/
-npm install
-npm run dev
-```
