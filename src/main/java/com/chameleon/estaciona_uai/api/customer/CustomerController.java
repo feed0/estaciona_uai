@@ -1,7 +1,5 @@
-package com.chameleon.estaciona_uai.controller;
+package com.chameleon.estaciona_uai.api.customer;
 
-import com.chameleon.estaciona_uai.dto.CustomerSignupDto;
-import com.chameleon.estaciona_uai.service.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

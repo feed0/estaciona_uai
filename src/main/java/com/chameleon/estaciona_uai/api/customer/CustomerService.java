@@ -1,8 +1,6 @@
-package com.chameleon.estaciona_uai.service;
+package com.chameleon.estaciona_uai.api.customer;
 
 import com.chameleon.estaciona_uai.domain.user.Customer;
-import com.chameleon.estaciona_uai.dto.CustomerSignupDto;
-import com.chameleon.estaciona_uai.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
