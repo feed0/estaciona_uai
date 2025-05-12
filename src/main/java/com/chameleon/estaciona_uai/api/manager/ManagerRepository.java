@@ -1,4 +1,4 @@
-package com.chameleon.estaciona_uai.repository;
+package com.chameleon.estaciona_uai.api.manager;
 
 import com.chameleon.estaciona_uai.domain.user.Manager;
 import org.springframework.data.jpa.repository.JpaRepository;

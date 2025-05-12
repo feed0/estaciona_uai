@@ -1,9 +1,7 @@
-package com.chameleon.estaciona_uai.service;
+package com.chameleon.estaciona_uai.api.manager;
 
 import com.chameleon.estaciona_uai.domain.parking.Parking;
 import com.chameleon.estaciona_uai.domain.user.Manager;
-import com.chameleon.estaciona_uai.dto.ManagerSignupDto;
-import com.chameleon.estaciona_uai.repository.ManagerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +14,9 @@ public class ManagerService {
     public void signup(ManagerSignupDto managerSignupDto) {
         // Manager
         Manager manager = new Manager();
-        manager.setName(managerSignupDto.getUserName());
-        manager.setEmail(managerSignupDto.getUserEmail());
-        manager.setPassword(managerSignupDto.getUserPassword());
+        manager.setName(managerSignupDto.getName());
+        manager.setEmail(managerSignupDto.getEmail());
+        manager.setPassword(managerSignupDto.getPassword());
 
         // Parking
         Parking parking = new Parking();
