@@ -1,4 +1,4 @@
-package com.chameleon.estaciona_uai.como_usar;
+package com.chameleon.estaciona_uai.api.como_usar;
 
 import org.springframework.stereotype.Service;
 

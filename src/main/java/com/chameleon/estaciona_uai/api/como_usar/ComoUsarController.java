@@ -1,4 +1,4 @@
-package com.chameleon.estaciona_uai.como_usar;
+package com.chameleon.estaciona_uai.api.como_usar;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

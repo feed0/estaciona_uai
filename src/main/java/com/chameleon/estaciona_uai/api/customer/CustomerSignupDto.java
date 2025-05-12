@@ -1,4 +1,4 @@
-package com.chameleon.estaciona_uai.dto;
+package com.chameleon.estaciona_uai.api.customer;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -10,25 +10,17 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ManagerSignupDto {
+public class CustomerSignupDto {
 
     @NotBlank(message = "Name is required")
     @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
-    private String userName;
+    private String name;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
-    private String userEmail;
+    private String email;
 
     @NotBlank(message = "Password is required")
     @Size(min = 6, message = "Password must be at least 6 characters long")
-    private String userPassword;
-
-    @NotBlank(message = "Parking name is required")
-    @Size(min = 2, max = 100, message = "Parking name must be between 2 and 100 characters")
-    private String parkingName;
-
-    @NotBlank(message = "Parking address is required")
-    @Size(min = 5, max = 200, message = "Parking address must be between 5 and 200 characters")
-    private String parkingAddress;
+    private String password;
 }
