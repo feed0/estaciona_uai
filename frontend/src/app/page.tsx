@@ -16,20 +16,41 @@ const FeatureIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const UserIcon = ({ className }: { className?: string }) => (
+    <svg
+        className={`w-6 h-6 ${className}`}
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+    >
+        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path> {/* Example user icon */}
+    </svg>
+);
+
 export default function Home() {
   return (
     <div className="grid grid-rows-[auto_1fr_auto] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      {/* Header */}
+      <header className="row-start-1 w-full flex justify-between items-center py-4 px-6 bg-white dark:bg-gray-800 shadow-md">
+        <Image
+            className="dark:invert"
+            src="/estaciona-uai-logo.png"
+            alt="App Logo"
+            width={50}
+            height={50}
+            priority
+        />
+        <Link href="/signin">
+          <UserIcon className="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer" />
+        </Link>
+      </header>
+
       <main className="flex flex-col gap-12 row-start-2 items-center text-center w-full max-w-4xl">
         {/* Hero Section */}
         <section className="flex flex-col gap-6 items-center">
-          <Image
-            className="dark:invert"
-            src="/estaciona-uai-logo.png" // Você pode querer substituir isso pelo logo da sua aplicação
-            alt="Logo do App"
-            width={180}
-            height={38}
-            priority
-          />
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
             Bem-vindo ao EstacionaUai
           </h1>
@@ -95,7 +116,7 @@ export default function Home() {
         <p className="text-sm text-gray-500 dark:text-gray-400">
           © {new Date().getFullYear()} EstacionaUai. Todos os direitos reservados.
         </p>
-        {/* Você pode adicionar mais links no rodapé aqui, se necessário */}
+        {/* You can add more footer links here if needed */}
         {/* <Link href="/about" className="text-sm text-blue-600 hover:underline">Sobre Nós</Link>
         <Link href="/contact" className="text-sm text-blue-600 hover:underline">Contato</Link> */}
       </footer>

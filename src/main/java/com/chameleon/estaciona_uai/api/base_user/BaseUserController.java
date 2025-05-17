@@ -23,11 +23,7 @@ public class BaseUserController {
 
     @PostMapping("/login")
     public ResponseEntity<BaseUserLoginResponse> login(@Valid @RequestBody BaseUserLoginRequest loginDto) {
-        try {
-            BaseUserLoginResponse userType = baseUserService.login(loginDto.getEmail(), loginDto.getPassword());
-            return ResponseEntity.ok(userType);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        BaseUserLoginResponse userType = baseUserService.login(loginDto.getEmail(), loginDto.getPassword());
+        return ResponseEntity.ok(userType);
     }
 }
