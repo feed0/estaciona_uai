@@ -1,5 +1,6 @@
 package com.chameleon.estaciona_uai.api.customer;
 
+import com.chameleon.estaciona_uai.api.customer.dto.CustomerSignupRequest;
 import com.chameleon.estaciona_uai.domain.user.Customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,14 +11,14 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
 
-    public void signup(CustomerSignupDto customerSignupDto) {
+    public void signup(CustomerSignupRequest customerSignupRequest) {
         Customer customer = new Customer();
-        customer.setName(customerSignupDto.getName());
-        customer.setEmail(customerSignupDto.getEmail());
-        customer.setPassword(customerSignupDto.getPassword());
+        customer.setName(customerSignupRequest.getName());
+        customer.setEmail(customerSignupRequest.getEmail());
+        customer.setPassword(customerSignupRequest.getPassword());
 
         customerRepository.save(customer);
 
-        System.out.println("Customer signed up: " + customerSignupDto);
+        System.out.println("Customer signed up: " + customerSignupRequest);
     }
 }
