@@ -1,5 +1,11 @@
 'use client';
 
+import { useState } from 'react';
+import { Plus } from 'lucide-react';
+import { useAdmins } from '@/hooks/useAdmins';
+import { AdminListItem } from '@/components/AdminListItem';
+import { AdminFormModal } from '@/components/AdminFormModal';
+import { Admin } from '@/types/admin';
 import { useParams } from 'next/navigation';
 
 export default function ManagerDashboardPage() {
