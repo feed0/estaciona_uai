@@ -24,18 +24,18 @@ export default function LoginPage() {
 
       if (response.ok) {
         const data = await response.json();
-        // Assuming BaseUserLoginResponse has a 'userType' field
+        const userId = data.userId;
         const userType = data.userType;
 
         switch (userType) {
           case 'MANAGER':
-            router.push('/manager/dashboard');
+            router.push(`/manager/${userId}/dashboard`);
             break;
           case 'ADMIN':
-            router.push('/admin/dashboard');
+            router.push(`/admin/${userId}/dashboard`);
             break;
           case 'CUSTOMER':
-            router.push('/customer/dashboard');
+            router.push(`/customer/${userId}/dashboard`);
             break;
           default:
             setError('Unknown user type received.');

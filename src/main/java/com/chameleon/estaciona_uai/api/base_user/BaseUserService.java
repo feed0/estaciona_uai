@@ -33,6 +33,6 @@ public class BaseUserService {
         else if (user instanceof Customer) {userType = UserType.CUSTOMER;}
         else {throw new UnexpectedBaseUserTypeException(email);}
 
-        return new BaseUserLoginResponse(userType, user.getId());
+        return new BaseUserLoginResponse(user.getId(), userType);
     }
 }
