@@ -1,93 +1,74 @@
-// src/components/AdminFormModal.tsx
-import { Admin } from '@/types/admin';
-import { Modal } from '@geist-ui/core';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Admin } from '@/types/generated';
 
-interface AdminFormModalProps {
-  isOpen: boolean;
+interface Props {
+  admin: Admin | null;
   onClose: () => void;
-  onSubmit: (data: Omit<Admin, 'id'>) => void;
-  initialData?: Admin;
+  onSubmit: (data: { name: string; email: string; password: string }) => void;
 }
 
-export const AdminFormModal = ({
-  isOpen,
-  onClose,
-  onSubmit,
-  initialData,
-}: AdminFormModalProps) => {
-  const [formData, setFormData] = useState({
-    name: initialData?.name || '',
-    email: initialData?.email || '',
-    password: '',
-  });
+export default function AdminFormModal({ admin, onClose, onSubmit }: Props) {
+  const [name, setName] = useState(admin?.name || '');
+  const [email, setEmail] = useState(admin?.email || '');
+  const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    setName(admin?.name || '');
+    setEmail(admin?.email || '');
+  }, [admin]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
-    onClose();
+    onSubmit({ name, email, password });
   };
 
   return (
-    <Modal visible={isOpen} onClose={onClose}>
-      <Modal.Title>
-        {initialData ? 'Edit Admin' : 'Create New Admin'}
-      </Modal.Title>
-      <Modal.Content>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Name
-            </label>
-            <input
-              type="text"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <input
-              type="email"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Password
-            </label>
+    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white dark:bg-gray-800 p-6 rounded shadow-md w-full max-w-sm"
+      >
+        <h2 className="text-xl mb-4">{admin ? 'Edit Admin' : 'Create Admin'}</h2>
+        <label className="block mb-2">
+          Name
+          <input
+            className="mt-1 w-full border rounded px-2 py-1"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </label>
+        <label className="block mb-2">
+          Email
+          <input
+            type="email"
+            className="mt-1 w-full border rounded px-2 py-1"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </label>
+        {!admin && (
+          <label className="block mb-4">
+            Password
             <input
               type="password"
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-              required={!initialData}
+              className="mt-1 w-full border rounded px-2 py-1"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
             />
-          </div>
-          <div className="flex justify-end gap-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-gray-700 border rounded-md"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 text-white bg-blue-600 rounded-md"
-            >
-              {initialData ? 'Update' : 'Create'}
-            </button>
-          </div>
-        </form>
-      </Modal.Content>
-    </Modal>
+          </label>
+        )}
+        <div className="flex justify-end space-x-2">
+          <button type="button" onClick={onClose} className="px-4 py-2">
+            Cancel
+          </button>
+          <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">
+            {admin ? 'Update' : 'Create'}
+          </button>
+        </div>
+      </form>
+    </div>
   );
-};
+}

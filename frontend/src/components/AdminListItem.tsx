@@ -1,31 +1,24 @@
-// src/components/AdminListItem.tsx
-import { Admin } from '@/types/admin';
 import { Pencil, Trash2 } from 'lucide-react';
+import { Admin } from '@/types/generated';
 
-interface AdminListItemProps {
+interface Props {
   admin: Admin;
-  onEdit: (admin: Admin) => void;
-  onDelete: (adminId: string) => void;
+  onEdit: () => void;
+  onDelete: () => void;
 }
 
-export const AdminListItem = ({ admin, onEdit, onDelete }: AdminListItemProps) => {
+export default function AdminListItem({ admin, onEdit, onDelete }: Props) {
   return (
-    <div className="flex items-center justify-between p-4 bg-white rounded-lg shadow">
-      <span className="text-gray-700">{admin.email}</span>
-      <div className="flex gap-2">
-        <button
-          onClick={() => onEdit(admin)}
-          className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
-        >
-          <Pencil size={20} />
+    <li className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded shadow">
+      <span>{admin.email}</span>
+      <div className="flex space-x-2">
+        <button onClick={onEdit} className="text-blue-500 hover:text-blue-700">
+          <Pencil size={18} />
         </button>
-        <button
-          onClick={() => onDelete(admin.id)}
-          className="p-2 text-gray-600 hover:text-red-600 transition-colors"
-        >
-          <Trash2 size={20} />
+        <button onClick={onDelete} className="text-red-500 hover:text-red-700">
+          <Trash2 size={18} />
         </button>
       </div>
-    </div>
+    </li>
   );
-};
+}
