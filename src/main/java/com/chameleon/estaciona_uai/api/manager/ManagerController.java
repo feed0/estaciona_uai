@@ -13,7 +13,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/managers")
+@RequestMapping("/api/manager")
 public class ManagerController {
 
     private final ManagerService managerService;
