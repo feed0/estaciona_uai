@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/base-users")
+@RequestMapping("/api/base-user")
 public class BaseUserController {
 
     private final BaseUserService baseUserService;
