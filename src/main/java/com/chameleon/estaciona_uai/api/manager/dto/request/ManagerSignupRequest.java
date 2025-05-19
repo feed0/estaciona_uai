@@ -1,4 +1,4 @@
-package com.chameleon.estaciona_uai.api.manager.dto;
+package com.chameleon.estaciona_uai.api.manager.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
