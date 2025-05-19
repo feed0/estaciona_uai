@@ -22,8 +22,7 @@ export default function ManagerDashboardPage() {
   const fetchAdmins = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:8080
-/api/managers/${userId}/admins`);
+      const res = await fetch(`http://localhost:8080/api/managers/${userId}/admins`);
       if (!res.ok) throw new Error('Failed to load admins.');
       const data: Admin[] = await res.json();
       setAdmins(data);
