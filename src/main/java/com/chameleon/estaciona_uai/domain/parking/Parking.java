@@ -21,6 +21,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Table(name = "parking")
 public class Parking {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -41,7 +42,6 @@ public class Parking {
 
     private LocalTime openAt;
     private LocalTime closeAt;
-
 
     private String documentation;
 }
