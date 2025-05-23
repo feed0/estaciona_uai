@@ -22,7 +22,7 @@ export default function ManagerDashboardPage() {
   const fetchAdmins = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:8080/api/managers/${userId}/admins`);
+      const res = await fetch(`http://localhost:8080/api/manager/${userId}/admins`);
       if (!res.ok) throw new Error('Failed to load admins.');
       const data: Admin[] = await res.json();
       setAdmins(data);
@@ -54,7 +54,7 @@ export default function ManagerDashboardPage() {
   const confirmDelete = async () => {
     if (!deletingAdmin) return;
     try {
-      const res = await fetch(`http://localhost:8080/api/managers/${userId}/admins/${deletingAdmin.id}`, { method: 'DELETE' });
+      const res = await fetch(`http://localhost:8080/api/manager${userId}/admins/${deletingAdmin.id}`, { method: 'DELETE' });
       if (!res.ok) throw new Error('Delete failed');
       setDeletingAdmin(null);
       fetchAdmins();
@@ -65,8 +65,8 @@ export default function ManagerDashboardPage() {
 
   const onFormSubmit = async (payload: { name: string; email: string; password: string }) => {
     const url = editingAdmin
-      ? `http://localhost:8080/api/managers/${userId}/admins/${editingAdmin.id}`
-      : `http://localhost:8080/api/managers/${userId}/admins`;
+      ? `http://localhost:8080/api/manager/${userId}/admin/${editingAdmin.id}`
+      : `http://localhost:8080/api/manager/${userId}/admin`;
     const method = editingAdmin ? 'PUT' : 'POST';
 
     const res = await fetch(url, {

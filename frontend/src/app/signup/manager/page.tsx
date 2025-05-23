@@ -17,7 +17,7 @@ export default function ManagerSignupPage() {
     setSuccessMessage(null);
 
     try {
-      const response = await fetch('http://localhost:8080/api/managers/signup', {
+      const response = await fetch('http://localhost:8080/api/manager/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

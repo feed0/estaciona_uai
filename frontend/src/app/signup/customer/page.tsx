@@ -15,7 +15,7 @@ export default function CustomerSignupPage() {
     setSuccessMessage(null);
 
     try {
-      const response = await fetch('http://localhost:8080/api/customers/signup', {
+      const response = await fetch('http://localhost:8080/api/customer/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
