@@ -11,4 +11,6 @@ import java.util.UUID;
 @Repository
 public interface ParkingRepository extends JpaRepository<Parking, UUID> {
     Optional<Parking> findByManager(Manager manager);
+    List<Parking> findAllByDeletedAtIsNull();
+    Optional<Parking> findByIdAndDeletedAtIsNull(UUID id);
 }
