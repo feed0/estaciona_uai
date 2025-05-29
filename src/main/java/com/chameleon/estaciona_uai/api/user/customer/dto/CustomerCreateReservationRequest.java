@@ -17,6 +17,9 @@ public class CustomerCreateReservationRequest {
     private UUID parkingSpaceId;
 
     @NotNull
+    private UUID parkingId;
+
+    @NotNull
     @Future(message = "Start time must be in the future")
     private LocalDateTime startAt;
 
