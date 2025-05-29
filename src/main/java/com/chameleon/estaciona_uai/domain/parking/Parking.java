@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
@@ -44,4 +45,7 @@ public class Parking {
     private LocalTime closeAt;
 
     private String documentation;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 }

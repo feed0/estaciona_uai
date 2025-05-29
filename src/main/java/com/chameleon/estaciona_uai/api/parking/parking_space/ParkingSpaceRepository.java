@@ -1,5 +1,6 @@
 package com.chameleon.estaciona_uai.api.parking.parking_space;
 
+import com.chameleon.estaciona_uai.domain.parking.Parking;
 import com.chameleon.estaciona_uai.domain.parking.parking_space.ParkingSpace;
 import com.chameleon.estaciona_uai.domain.user.Manager;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,4 +32,13 @@ public interface ParkingSpaceRepository extends JpaRepository<ParkingSpace, UUID
              AND ps.deletedAt IS NULL
            """)
     List<ParkingSpace> findActiveByManager(@Param("manager") Manager manager);
+
+        // ...existing code...
+    List<ParkingSpace> findByParkingAndDeletedAtIsNull(Parking parking);
+
+    @Query("SELECT ps FROM ParkingSpace ps JOIN FETCH ps.parking WHERE ps.id = :id AND ps.deletedAt IS NULL")
+    Optional<ParkingSpace> findByIdAndFetchParking(@Param("id") UUID id);
+
+    // If you need a method to find active spaces by manager for other purposes:
+    // List<ParkingSpace> findActiveByManager(Manager manager);
 }
