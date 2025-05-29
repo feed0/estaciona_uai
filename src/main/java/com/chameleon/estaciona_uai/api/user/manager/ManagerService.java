@@ -3,10 +3,13 @@ package com.chameleon.estaciona_uai.api.user.manager;
 import com.chameleon.estaciona_uai.api.user.admin.AdminRepository;
 import com.chameleon.estaciona_uai.api.user.manager.dto.request.ManagerManagesAdminRequest;
 import com.chameleon.estaciona_uai.api.user.manager.dto.request.ManagerSignupRequest;
+import com.chameleon.estaciona_uai.api.user.manager.dto.response.ManagerResponse;
 import com.chameleon.estaciona_uai.domain.parking.Parking;
 import com.chameleon.estaciona_uai.domain.user.Admin;
 import com.chameleon.estaciona_uai.domain.user.Manager;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -33,6 +36,7 @@ public class ManagerService {
         Parking parking = new Parking();
         parking.setName(managerSignupRequest.getParkingName());
         parking.setAddress(managerSignupRequest.getParkingAddress());
+        parking.setHourlyPrice(managerSignupRequest.getHourlyPrice()); // Add this line
 
         // Relationship
         parking.setManager(manager);
@@ -99,5 +103,12 @@ public class ManagerService {
         }
 
         adminRepository.delete(admin);
+    }
+
+    public ManagerResponse getManagerById(UUID managerId) {
+        Manager manager = managerRepository.findById(managerId)
+                .orElseThrow(() -> new EntityNotFoundException("Manager not found with id: " + managerId));
+
+        return new ManagerResponse(manager.getId(), manager.getName(), manager.getEmail());
     }
 }

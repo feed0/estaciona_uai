@@ -1,4 +1,4 @@
-package com.chameleon.estaciona_uai.api.user.customer.dto;
+package com.chameleon.estaciona_uai.api.user.customer.dto.response;
 
 import com.chameleon.estaciona_uai.domain.reservation.Reservation;
 import com.chameleon.estaciona_uai.domain.reservation.ReservationStatus;

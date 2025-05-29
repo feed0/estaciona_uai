@@ -30,4 +30,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, UUID> 
             @Param("statuses") List<ReservationStatus> statuses);
 
     List<Reservation> findByParkingSpaceAndStatusIn(ParkingSpace parkingSpace, List<ReservationStatus> statuses);
+
+    List<Reservation> findByStatusAndEndAtBefore(ReservationStatus status, LocalDateTime dateTime);
 }

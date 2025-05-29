@@ -1,6 +1,5 @@
-package com.chameleon.estaciona_uai.api.user.customer.dto;
+package com.chameleon.estaciona_uai.api.user.customer.dto.request;
 
-import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -16,12 +15,9 @@ public class CustomerCreateReservationRequest {
     @NotNull
     private UUID parkingSpaceId;
 
-    @NotNull
-    private UUID parkingId;
-
-    @NotNull
-    @Future(message = "Start time must be in the future")
-    private LocalDateTime startAt;
+//    @NotNull
+//    @Future(message = "Start time must be in the future")
+//    private LocalDateTime startAt;
 
     @NotNull
     private LocalDateTime endAt;

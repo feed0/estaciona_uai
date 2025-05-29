@@ -1,5 +1,6 @@
-package com.chameleon.estaciona_uai.api.user.customer.dto;
+package com.chameleon.estaciona_uai.api.user.customer.dto.response;
 
+import com.chameleon.estaciona_uai.api.user.customer.dto.CustomerParkingSpaceInfo;
 import com.chameleon.estaciona_uai.domain.parking.Parking;
 import com.chameleon.estaciona_uai.domain.parking.parking_space.ParkingSpace;
 import lombok.Builder;

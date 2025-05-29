@@ -20,6 +20,9 @@ public class BaseUserLoginResponse {
     private UUID userId;
 
     @NotNull
+    private String name;
+
+    @NotNull
     @NotEmpty
     @Enumerated(EnumType.STRING)
     private UserType userType;

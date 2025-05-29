@@ -40,7 +40,6 @@ public class AdminService {
 
     @Transactional
     public java.util.List<AdminManagesParkingSpaceResponse> getParkingSpaces(UUID adminId) {
-
         Admin admin = adminRepository.findById(adminId)
                 .orElseThrow(() -> new SecurityException("NOT_FOUND_ADMIN"));
 
@@ -90,6 +89,6 @@ public class AdminService {
                 .status(parkingSpace.getStatus())
                 .deletedAt(parkingSpace.getDeletedAt())
                 .version(parkingSpace.getVersion())
+                .parkingName(parkingSpace.getParking().getName())
                 .build();
-    }
-}
+    }}

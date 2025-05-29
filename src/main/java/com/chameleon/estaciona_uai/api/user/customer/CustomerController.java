@@ -1,6 +1,11 @@
 package com.chameleon.estaciona_uai.api.user.customer;
 
-import com.chameleon.estaciona_uai.api.user.customer.dto.*;
+import com.chameleon.estaciona_uai.api.user.customer.dto.request.CustomerCreateReservationRequest;
+import com.chameleon.estaciona_uai.api.user.customer.dto.request.CustomerSignupRequest;
+import com.chameleon.estaciona_uai.api.user.customer.dto.response.CustomerParkingDetailResponse;
+import com.chameleon.estaciona_uai.api.user.customer.dto.response.CustomerParkingSummaryResponse;
+import com.chameleon.estaciona_uai.api.user.customer.dto.response.CustomerReservationResponse;
+import com.chameleon.estaciona_uai.api.user.customer.dto.response.CustomerResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +28,12 @@ public class CustomerController {
     public ResponseEntity<String> signup(@RequestBody CustomerSignupRequest customerSignupRequest) {
         customerService.signup(customerSignupRequest);
         return new ResponseEntity<>("Customer signed up successfully", HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{customerId}")
+    public ResponseEntity<CustomerResponse> getCustomerById(@PathVariable UUID customerId) {
+        CustomerResponse customer = customerService.getCustomerById(customerId);
+        return ResponseEntity.ok(customer);
     }
 
         // == Parkings Listing Endpoints ==

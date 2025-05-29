@@ -19,7 +19,6 @@ public class BaseUserService {
     }
 
     public BaseUserLoginResponse login(String email, String password) {
-
         BaseUser user = baseUserRepository.findByEmail(email)
                 .orElseThrow(() -> new BaseUserNotFoundException(email));
 
@@ -33,6 +32,6 @@ public class BaseUserService {
         else if (user instanceof Customer) {userType = UserType.CUSTOMER;}
         else {throw new UnexpectedBaseUserTypeException(email);}
 
-        return new BaseUserLoginResponse(user.getId(), userType);
+        return new BaseUserLoginResponse(user.getId(), user.getName(), userType);
     }
 }

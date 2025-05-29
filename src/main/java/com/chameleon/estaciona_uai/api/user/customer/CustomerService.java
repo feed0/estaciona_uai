@@ -3,7 +3,12 @@ package com.chameleon.estaciona_uai.api.user.customer;
 import com.chameleon.estaciona_uai.api.parking.ParkingRepository;
 import com.chameleon.estaciona_uai.api.parking.parking_space.ParkingSpaceRepository;
 import com.chameleon.estaciona_uai.api.reservation.ReservationRepository;
-import com.chameleon.estaciona_uai.api.user.customer.dto.*;
+import com.chameleon.estaciona_uai.api.user.customer.dto.request.CustomerCreateReservationRequest;
+import com.chameleon.estaciona_uai.api.user.customer.dto.request.CustomerSignupRequest;
+import com.chameleon.estaciona_uai.api.user.customer.dto.response.CustomerParkingDetailResponse;
+import com.chameleon.estaciona_uai.api.user.customer.dto.response.CustomerParkingSummaryResponse;
+import com.chameleon.estaciona_uai.api.user.customer.dto.response.CustomerReservationResponse;
+import com.chameleon.estaciona_uai.api.user.customer.dto.response.CustomerResponse;
 import com.chameleon.estaciona_uai.domain.parking.Parking;
 import com.chameleon.estaciona_uai.domain.parking.parking_space.ParkingSpace;
 import com.chameleon.estaciona_uai.domain.parking.parking_space.ParkingSpaceStatus;
@@ -45,7 +50,6 @@ public class CustomerService {
 
         // == Reservation Management ==
 
-    @Transactional
     public CustomerReservationResponse createReservation(UUID customerId, CustomerCreateReservationRequest request) {
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found with ID: " + customerId));
@@ -53,40 +57,36 @@ public class CustomerService {
         ParkingSpace parkingSpace = parkingSpaceRepository.findById(request.getParkingSpaceId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Parking space not found with ID: " + request.getParkingSpaceId()));
 
-        if (request.getStartAt().isAfter(request.getEndAt()) || request.getStartAt().isEqual(request.getEndAt())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "End time must be after start time");
-        }
-        if (request.getStartAt().isBefore(LocalDateTime.now())) {
-             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Start time cannot be in the past");
+        // Use current time as the start time
+        LocalDateTime startAt = LocalDateTime.now();
+
+        if (startAt.isAfter(request.getEndAt()) || startAt.isEqual(request.getEndAt())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "End time must be after the current time");
         }
 
-
-        ParkingSpace freshParkingSpace = parkingSpaceRepository.findByIdAndFetchParking(parkingSpace.getId()) // Assumes a method to fetch parking eagerly or join
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Parking space disappeared"));
-        if (freshParkingSpace.getVersion() != parkingSpace.getVersion()) { // Compare with initially fetched version if needed, or rely on DB versioning
+        ParkingSpace freshParkingSpace = parkingSpaceRepository.findByIdAndFetchParking(parkingSpace.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Parking space disappeared"));
+        if (freshParkingSpace.getVersion() != parkingSpace.getVersion()) {
             throw new OptimisticLockException("Parking space was updated by another transaction. Please try again.");
         }
-        freshParkingSpace.assertFree(); // This should check current status
+        freshParkingSpace.assertFree();
 
         Parking parking = freshParkingSpace.getParking();
         if (parking.getOpenAt() != null && parking.getCloseAt() != null) {
-            // Check if parking is 24h
             boolean is24Hour = parking.getOpenAt().equals(parking.getCloseAt());
             if (!is24Hour) {
-                if (request.getStartAt().toLocalTime().isBefore(parking.getOpenAt()) ||
-                    request.getEndAt().toLocalTime().isAfter(parking.getCloseAt()) ||
-                    // Case where reservation spans across midnight, but parking is not 24h
-                    (request.getStartAt().toLocalDate().isBefore(request.getEndAt().toLocalDate()) &&
-                     !request.getEndAt().toLocalTime().equals(parking.getCloseAt()) ) ) {
+                if (startAt.toLocalTime().isBefore(parking.getOpenAt()) ||
+                        request.getEndAt().toLocalTime().isAfter(parking.getCloseAt()) ||
+                        (startAt.toLocalDate().isBefore(request.getEndAt().toLocalDate()) && !request.getEndAt().toLocalTime().equals(parking.getCloseAt()))) {
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation time is outside parking operating hours: " + parking.getOpenAt() + " - " + parking.getCloseAt());
                 }
             }
         }
 
-
-        List<ReservationStatus> conflictingStatuses = Arrays.asList(ReservationStatus.CONFIRMED, ReservationStatus.ACTIVE);
+        // Update to only use CONFIRMED status since ACTIVE is removed
+        List<ReservationStatus> conflictingStatuses = Arrays.asList(ReservationStatus.CONFIRMED);
         List<Reservation> conflictingReservations = reservationRepository.findConflictingReservations(
-                freshParkingSpace, request.getStartAt(), request.getEndAt(), conflictingStatuses);
+                freshParkingSpace, startAt, request.getEndAt(), conflictingStatuses);
 
         if (!conflictingReservations.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Parking space is already reserved for the selected time slot.");
@@ -95,7 +95,7 @@ public class CustomerService {
         Reservation reservation = new Reservation();
         reservation.setCustomer(customer);
         reservation.setParkingSpace(freshParkingSpace);
-        reservation.setStartAt(request.getStartAt());
+        reservation.setStartAt(startAt);
         reservation.setEndAt(request.getEndAt());
         reservation.setStatus(ReservationStatus.CONFIRMED);
         reservation.setCreatedAt(LocalDateTime.now());
@@ -132,34 +132,28 @@ public class CustomerService {
         if (reservation.getStatus() == ReservationStatus.COMPLETED || reservation.getStatus() == ReservationStatus.CANCELLED) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation is already " + reservation.getStatus().toString().toLowerCase() + " and cannot be cancelled.");
         }
-        if (reservation.getStatus() == ReservationStatus.ACTIVE) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot cancel an active reservation. Please contact support.");
-        }
-        // Optional: Add rule: Cannot cancel if startAt is within X hours from now.
-        // if (reservation.getStartAt().isBefore(LocalDateTime.now().plusHours(1))) { // Example: 1 hour notice
-        //     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation cannot be cancelled as it starts too soon.");
+
+        // Remove this check since ACTIVE status no longer exists
+        // if (reservation.getStatus() == ReservationStatus.ACTIVE) {
+        //    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot cancel an active reservation. Please contact support.");
         // }
 
-
         reservation.setStatus(ReservationStatus.CANCELLED);
+        reservation.setCancelledAt(LocalDateTime.now());
         reservation.setUpdatedAt(LocalDateTime.now());
         reservationRepository.save(reservation);
 
         ParkingSpace parkingSpace = reservation.getParkingSpace();
-        // Check if other active/confirmed reservations exist for this space for the *same time slot or future*
-        // This logic might be complex. For now, if we cancel, we check if ANY other reservation makes it reserved.
-        List<ReservationStatus> activeStatuses = Arrays.asList(ReservationStatus.CONFIRMED, ReservationStatus.ACTIVE);
+        // Update to only use CONFIRMED status
+        List<ReservationStatus> activeStatuses = Arrays.asList(ReservationStatus.CONFIRMED);
         List<Reservation> otherReservations = reservationRepository.findByParkingSpaceAndStatusIn(parkingSpace, activeStatuses);
 
-        // If no other CONFIRMED or ACTIVE reservations for this space, set it to FREE
-        // This needs to be careful about concurrent updates.
         if (otherReservations.stream().noneMatch(r -> !r.getId().equals(reservationId))) {
             ParkingSpace freshParkingSpace = parkingSpaceRepository.findById(parkingSpace.getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Parking space disappeared during cancellation"));
-            // Only set to FREE if its current status is RESERVED. It might be OCCUPIED by a non-reserved car.
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Parking space disappeared during cancellation"));
             if (freshParkingSpace.getStatus() == ParkingSpaceStatus.RESERVED) {
-                 freshParkingSpace.setStatus(ParkingSpaceStatus.FREE);
-                 parkingSpaceRepository.save(freshParkingSpace);
+                freshParkingSpace.setStatus(ParkingSpaceStatus.FREE);
+                parkingSpaceRepository.save(freshParkingSpace);
             }
         }
     }
@@ -181,5 +175,14 @@ public class CustomerService {
         List<ParkingSpace> activeSpaces = parkingSpaceRepository.findByParkingAndDeletedAtIsNull(parking);
 
         return CustomerParkingDetailResponse.fromEntity(parking, activeSpaces);
+    }
+
+    @Transactional
+    public CustomerResponse getCustomerById(UUID customerId) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Customer not found with ID: " + customerId));
+
+        return CustomerResponse.fromEntity(customer);
     }
 }

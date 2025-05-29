@@ -1,8 +1,11 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function CustomerSignupPage() {
+
+  const router = useRouter();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -10,29 +13,39 @@ export default function CustomerSignupPage() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+
     event.preventDefault();
     setError(null);
     setSuccessMessage(null);
 
     try {
       const response = await fetch('http://localhost:8080/api/customer/signup', {
+
         method: 'POST',
         headers: {
+
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ name, email, password }),
       });
 
       if (response.ok) {
+
         setSuccessMessage('Customer signed up successfully!');
         setName('');
         setEmail('');
         setPassword('');
+
+        setTimeout(() => {
+          router.push('/signin');  // Changed from router.push('/');
+        }, 1500);
       } else {
+
         const data = await response.text();
         setError(data || 'Failed to sign up. Please try again.');
       }
     } catch (err) {
+
       setError('An unexpected error occurred. Please try again.');
       console.error('Signup error:', err);
     }

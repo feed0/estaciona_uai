@@ -15,4 +15,5 @@ public class AdminManagesParkingSpaceResponse {
     private ParkingSpaceStatus status;
     private LocalDateTime deletedAt;
     private long version;
+    private String parkingName;
 }

@@ -3,7 +3,9 @@ package com.chameleon.estaciona_uai.api.user.manager;
 import com.chameleon.estaciona_uai.api.user.manager.dto.request.ManagerManagesAdminRequest;
 import com.chameleon.estaciona_uai.api.user.manager.dto.request.ManagerSignupRequest;
 import com.chameleon.estaciona_uai.api.user.manager.dto.response.ManagerManagesAdminResponse;
+import com.chameleon.estaciona_uai.api.user.manager.dto.response.ManagerResponse;
 import com.chameleon.estaciona_uai.domain.user.Admin;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,7 @@ public class ManagerController {
 
     private final ManagerService managerService;
 
+    @Autowired
     public ManagerController(ManagerService managerService) {
         this.managerService = managerService;
     }
@@ -26,6 +29,12 @@ public class ManagerController {
     public ResponseEntity<String>signup(@RequestBody ManagerSignupRequest managerSignupRequest) {
         managerService.signup(managerSignupRequest);
         return new ResponseEntity<>("Manager signed up successfully", HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{managerId}")
+    public ResponseEntity<ManagerResponse> getManagerById(@PathVariable UUID managerId) {
+        ManagerResponse manager = managerService.getManagerById(managerId);
+        return ResponseEntity.ok(manager);
     }
 
     @PostMapping("/{managerId}/admins")

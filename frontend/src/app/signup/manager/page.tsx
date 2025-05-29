@@ -1,13 +1,16 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function ManagerSignupPage() {
+  const router = useRouter();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [parkingName, setParkingName] = useState('');
   const [parkingAddress, setParkingAddress] = useState('');
+  const [hourlyPrice, setHourlyPrice] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -22,16 +25,30 @@ export default function ManagerSignupPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, email, password, parkingName, parkingAddress }),
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          parkingName,
+          parkingAddress,
+          hourlyPrice: parseFloat(hourlyPrice)
+        }),
       });
 
       if (response.ok) {
         setSuccessMessage('Manager signed up successfully!');
+        // Clear form fields
         setName('');
         setEmail('');
         setPassword('');
         setParkingName('');
         setParkingAddress('');
+        setHourlyPrice('');
+
+        // Redirect to login page after a short delay
+        setTimeout(() => {
+          router.push('/signin');
+        }, 1500);
       } else {
         const data = await response.text();
         setError(data || 'Failed to sign up. Please try again.');
@@ -60,6 +77,7 @@ export default function ManagerSignupPage() {
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
         {successMessage && <p className="text-green-500 text-sm mb-4">{successMessage}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
+
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
               Manager Name
@@ -76,6 +94,7 @@ export default function ManagerSignupPage() {
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
           </div>
+
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
               Manager Email
@@ -91,6 +110,7 @@ export default function ManagerSignupPage() {
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
           </div>
+
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
               Password
@@ -107,6 +127,7 @@ export default function ManagerSignupPage() {
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
           </div>
+
           <div>
             <label htmlFor="parkingName" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
               Parking Name
@@ -123,6 +144,7 @@ export default function ManagerSignupPage() {
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
           </div>
+
           <div>
             <label htmlFor="parkingAddress" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
               Parking Address
@@ -139,6 +161,33 @@ export default function ManagerSignupPage() {
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
           </div>
+
+          <div>
+            <label htmlFor="hourlyPrice" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+              Hourly Price
+            </label>
+            <div className="relative mt-1">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span className="text-gray-500 sm:text-sm">$</span>
+              </div>
+              <input
+                  id="hourlyPrice"
+                  name="hourlyPrice"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  required
+                  value={hourlyPrice}
+                  onChange={(e) => setHourlyPrice(e.target.value)}
+                  className="mt-1 block w-full pl-7 pr-12 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  placeholder="0.00"
+              />
+              <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                <span className="text-gray-500 sm:text-sm">USD</span>
+              </div>
+            </div>
+          </div>
+
           <div className="flex justify-center items-center">
             <button
                 type="submit"
@@ -147,6 +196,7 @@ export default function ManagerSignupPage() {
               Sign Up
             </button>
           </div>
+
         </form>
       </div>
     </div>
