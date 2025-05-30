@@ -15,6 +15,7 @@ interface ParkingDetail {
   id: string;
   name: string;
   address: string;
+  hourlyPrice: number;
   parkingSpaces?: ParkingSpace[];
 }
 
@@ -157,61 +158,71 @@ export default function ParkingSpacesPage() {
           </ul>
         )}
       </div>
-      {selectedSpace && (
-          <div className="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center">
-            <div className={(isDarkMode ? 'bg-gray-800' : 'bg-white') + ' p-6 rounded shadow-md w-full max-w-sm'}>
-              <p className={(isDarkMode ? 'text-gray-200' : 'text-gray-800') + ' mb-4'}>
-                Do you want to reserve the space
-              </p>
-              <p className={(isDarkMode ? 'text-gray-200' : 'text-gray-800') + ' mb-4'}>
-                "{selectedSpace.identifier}" ?
-              </p>
+        {selectedSpace && (
+            <div className="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+              <div className={(isDarkMode ? 'bg-gray-800' : 'bg-white') + ' p-6 rounded shadow-md w-full max-w-sm'}>
+                <p className={(isDarkMode ? 'text-gray-200' : 'text-gray-800') + ' mb-4'}>
+                  Do you want to reserve the space
+                </p>
+                <p className={(isDarkMode ? 'text-gray-200' : 'text-gray-800') + ' mb-4'}>
+                  "{selectedSpace.identifier}" ?
+                </p>
 
-              <div className="mb-6">
-                <label className={(isDarkMode ? 'text-gray-200' : 'text-gray-800') + ' block mb-2'}>
-                  Duration (HH:MM):
-                </label>
-                <div className="flex items-center">
-                  <button
-                      onClick={() => adjustDuration(-15)}
-                      className={(isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-200') + ' px-3 py-1 rounded-l'}
-                  >
-                    -
-                  </button>
-                  <div className={(isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-100') + ' px-4 py-1 text-center w-24'}>
-                    {formatDuration(reservationDuration)}
+                {/* Add hourly price information */}
+                <div className="mb-4">
+                  <p className={(isDarkMode ? 'text-gray-200' : 'text-gray-800')}>
+                    <span className="font-semibold">Hourly Rate:</span> ${parkingDetail?.hourlyPrice?.toFixed(2)}
+                  </p>
+                  <p className={(isDarkMode ? 'text-gray-300' : 'text-gray-600') + ' text-sm'}>
+                    Estimated total: ${((parkingDetail?.hourlyPrice || 0) * reservationDuration / 60).toFixed(2)}
+                  </p>
+                </div>
+
+                <div className="mb-6">
+                  <label className={(isDarkMode ? 'text-gray-200' : 'text-gray-800') + ' block mb-2'}>
+                    Duration (HH:MM):
+                  </label>
+                  <div className="flex items-center">
+                    <button
+                        onClick={() => adjustDuration(-15)}
+                        className={(isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-200') + ' px-3 py-1 rounded-l'}
+                    >
+                      -
+                    </button>
+                    <div className={(isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-100') + ' px-4 py-1 text-center w-24'}>
+                      {formatDuration(reservationDuration)}
+                    </div>
+                    <button
+                        onClick={() => adjustDuration(15)}
+                        className={(isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-200') + ' px-3 py-1 rounded-r'}
+                    >
+                      +
+                    </button>
                   </div>
+                </div>
+
+                <div className="flex justify-end space-x-2">
                   <button
-                      onClick={() => adjustDuration(15)}
-                      className={(isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-200') + ' px-3 py-1 rounded-r'}
+                      className={(isDarkMode
+                          ? 'bg-gray-600 text-gray-200'
+                          : 'bg-gray-300 text-gray-800') + ' px-4 py-2 rounded'}
+                      onClick={() => setSelectedSpace(null)}
                   >
-                    +
+                    Cancel
+                  </button>
+                  <button
+                      className="px-4 py-2 bg-blue-600 text-white rounded"
+                      onClick={() => {
+                        // Pass the duration to reserveSpace
+                        reserveSpace(selectedSpace, reservationDuration);
+                      }}
+                  >
+                    Reserve
                   </button>
                 </div>
               </div>
-
-              <div className="flex justify-end space-x-2">
-                <button
-                    className={(isDarkMode
-                        ? 'bg-gray-600 text-gray-200'
-                        : 'bg-gray-300 text-gray-800') + ' px-4 py-2 rounded'}
-                    onClick={() => setSelectedSpace(null)}
-                >
-                  Cancel
-                </button>
-                <button
-                    className="px-4 py-2 bg-blue-600 text-white rounded"
-                    onClick={() => {
-                      // Pass the duration to reserveSpace
-                      reserveSpace(selectedSpace, reservationDuration);
-                    }}
-                >
-                  Reserve
-                </button>
-              </div>
             </div>
-          </div>
-      )}
+        )}
     </div>
   );
 }

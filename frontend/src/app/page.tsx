@@ -110,7 +110,7 @@ export default function Home() {
 
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col items-center">
               <FeatureIcon />
-              <h3 className="text-xl font-semibold mt-4 mb-2">2. Fure a fila de novo!</h3>
+              <h3 className="text-xl font-semibold mt-4 mb-2">3. Fure a fila de novo!</h3>
               <p className="text-gray-600 dark:text-gray-300 mb-4">
                 Pague num instante!
               </p>
