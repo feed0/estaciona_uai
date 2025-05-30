@@ -2,6 +2,7 @@ package com.chameleon.estaciona_uai.api.user.manager.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,4 +32,7 @@ public class ManagerSignupRequest {
     @NotBlank(message = "Parking address is required")
     @Size(min = 5, max = 200, message = "Parking address must be between 5 and 200 characters")
     private String parkingAddress;
+
+    @NotNull
+    private Double hourlyPrice;
 }

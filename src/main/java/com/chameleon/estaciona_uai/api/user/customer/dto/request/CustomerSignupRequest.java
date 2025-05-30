@@ -1,4 +1,4 @@
-package com.chameleon.estaciona_uai.api.user.customer.dto;
+package com.chameleon.estaciona_uai.api.user.customer.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

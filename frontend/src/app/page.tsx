@@ -77,27 +77,52 @@ export default function Home() {
         <section className="w-full py-12">
           <h2 className="text-3xl font-bold mb-8">Como Funciona</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col items-center">
               <FeatureIcon />
-              <h3 className="text-xl font-semibold mt-4 mb-2">1. Busque</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Clientes podem buscar facilmente por vagas disponíveis próximas ao seu destino.
+              <h3 className="text-xl font-semibold mt-4 mb-2">1. Chega de filas</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
+                Fure a fila e reserve sua vaga com antecedência, evitando esperas desnecessárias!
               </p>
+              <Image
+                  src="/chega-de-filas.png"
+                  alt="Chega de filas"
+                  width={200}
+                  height={150}
+                  className="rounded-md mt-2"
+              />
             </div>
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col items-center">
               <FeatureIcon />
-              <h3 className="text-xl font-semibold mt-4 mb-2">2. Reserve</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Reserve sua vaga preferida antecipadamente com alguns cliques.
+              <h3 className="text-xl font-semibold mt-4 mb-2">2. Chega de procura</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
+                Sempre saiba onde estacionou seu carro com suas vagas nas mãos!
               </p>
+              <Image
+                  src="/chega-de-procura.png"
+                  alt="Chega de procura"
+                  width={200}
+                  height={150}
+                  className="rounded-md mt-2"
+              />
             </div>
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col items-center">
               <FeatureIcon />
-              <h3 className="text-xl font-semibold mt-4 mb-2">3. Estacione / Anuncie</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Estacione sem complicações. Gerentes podem anunciar suas vagas e lucrar.
+              <h3 className="text-xl font-semibold mt-4 mb-2">3. Fure a fila de novo!</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
+                Pague num instante!
               </p>
+              <Image
+                  src="/pague-num-instante.png"
+                  alt="Pague num instante"
+                  width={200}
+                  height={150}
+                  className="rounded-md mt-2"
+              />
             </div>
+
           </div>
         </section>
 
